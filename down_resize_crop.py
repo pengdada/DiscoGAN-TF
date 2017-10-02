@@ -3,21 +3,36 @@ from PIL import Image
 import os
 import tarfile
 import shutil
+import pymp
 cwd = os.getcwd()
 
 handbag_url = 'https://people.eecs.berkeley.edu/~tinghuiz/projects/pix2pix/datasets/edges2handbags.tar.gz'
 shoes_url = 'https://people.eecs.berkeley.edu/~tinghuiz/projects/pix2pix/datasets/edges2shoes.tar.gz'
 
-wget.download(handbag_url)
-wget.download(shoes_url)
+#wget.download(handbag_url)
+#wget.download(shoes_url)
 
-with tarfile.open('./edges2handbags.tar.gz') as tar:
-	tar.extractall()
-	tar.close()
+with pymp.Parallel(2) as p:
+    for index in p.range(0, 2):
+		if index == 0:
+			print "wget.download(handbag_url)" + handbag_url
+			wget.download(handbag_url)
+		if index == 1:
+			print "wget.download(shoes_url)" + shoes_url
+			wget.download(shoes_url)
 
-with tarfile.open('./edges2shoes.tar.gz') as tar:
-	tar.extractall()
-	tar.close()
+with pymp.Parallel(2) as p:
+    for index in p.range(0, 2):
+		if index == 0:
+			print "with tarfile.open('./edges2handbags.tar.gz') as tar:"
+			with tarfile.open('./edges2handbags.tar.gz') as tar:
+				tar.extractall()
+				tar.close()
+		if index == 1:
+			print "with tarfile.open('./edges2shoes.tar.gz') as tar:"
+			with tarfile.open('./edges2shoes.tar.gz') as tar:
+				tar.extractall()
+				tar.close()
 
 bag_dir = "/edges2handbags/train/"
 shoe_dir = "/edges2shoes/train/"
